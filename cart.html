@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart | Container Custom Cabinets</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Container Custom Cabinets</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="product.html">Product</a> |
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Your Cart</h2>
+
+    <div id="cartEmpty" style="display:none;">
+      <p>Your cart is empty.</p>
+      <a href="product.html">Go back to the product page</a>
+    </div>
+
+    <div id="cartContent" style="display:none;">
+      <div id="cartItems"></div>
+
+      <hr>
+
+      <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
+
+      <button id="checkoutBtn">Proceed to Checkout</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getCart, updateQty, removeItem } from "./cart-utils.js";
+
+    const cart = getCart();
+
+    const cartEmpty = document.getElementById("cartEmpty");
+    const cartContent = document.getElementById("cartContent");
+    const cartItems = document.getElementById("cartItems");
+    const subtotalEl = document.getElementById("subtotal");
+
+    function render() {
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        cartEmpty.style.display = "block";
+        cartContent.style.display = "none";
+        return;
+      }
+
+      cartEmpty.style.display = "none";
+      cartContent.style.display = "block";
+
+      cartItems.innerHTML = "";
+
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        subtotal += item.unitPrice * item.qty;
+
+        const div = document.createElement("div");
+        div.style.border = "1px solid #ddd";
+        div.style.padding = "12px";
+        div.style.marginBottom = "12px";
+
+        div.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>Size: ${item.size.w}"W x ${item.size.h}"H x ${item.size.d}"D</p>
+          <p>Finish: ${item.finish}</p>
+          <p>Unit Price: $${item.unitPrice.toFixed(2)}</p>
+
+          <label>
+            Qty:
+            <input type="number" min="1" value="${item.qty}" data-index="${index}" class="qtyInput"/>
+          </label>
+
+          <button data-index="${index}" class="removeBtn">Remove</button>
+        `;
+
+        cartItems.appendChild(div);
+      });
+
+      subtotalEl.textContent = subtotal.toFixed(2);
+
+      // Hook up qty change events
+      document.querySelectorAll(".qtyInput").forEach(input => {
+        input.addEventListener("change", (e) => {
+          const idx = Number(e.target.dataset.index);
+          updateQty(idx, e.target.value);
+          render();
+        });
+      });
+
+      // Hook up remove events
+      document.querySelectorAll(".removeBtn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const idx = Number(e.target.dataset.index);
+          removeItem(idx);
+          render();
+        });
+      });
+    }
+
+    document.getElementById("checkoutBtn").addEventListener("click", () => {
+      // We’ll build checkout.html next
+      alert("Checkout page coming next! (checkout.html)");
+    });
+
+    render();
+  </script>
+</body>
+</html>
