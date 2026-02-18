@@ -39,57 +39,133 @@
     <div id="checkoutWrap" style="display:none;">
       <h3>Customer Information</h3>
       <form id="checkoutForm">
-        <label>
-          Full Name
-          <input type="text" id="fullName" required />
-        </label>
-        <br><br>
+       <div class="grid grid-2">
 
-        <label>
-          Email
-          <input type="email" id="email" required />
-        </label>
-        <br><br>
+  <!-- LEFT SIDE: Customer + Payment -->
+  <div class="card">
+    <h3>Customer Information</h3>
 
-        <label>
-          Phone
-          <input type="tel" id="phone" required />
-        </label>
+    <div class="form-grid">
+      <div class="full">
+        <label>Full Name</label>
+        <input type="text" id="fullName" required />
+      </div>
 
-        <hr>
+      <div>
+        <label>Email</label>
+        <input type="email" id="email" required />
+      </div>
 
-        <h3>Fulfillment Method</h3>
-        <label>
-          <input type="radio" name="fulfillment" value="Pickup" checked />
-          Pickup
-        </label>
-        <label style="margin-left:12px;">
-          <input type="radio" name="fulfillment" value="Delivery" />
-          Delivery
-        </label>
+      <div>
+        <label>Phone</label>
+        <input type="tel" id="phone" required />
+      </div>
+    </div>
 
-        <div id="deliveryFields" style="display:none; margin-top:12px;">
-          <h4>Delivery Address</h4>
-          <label>
-            Street Address
-            <input type="text" id="address1" />
-          </label>
-          <br><br>
-          <label>
-            City
-            <input type="text" id="city" />
-          </label>
-          <br><br>
-          <label>
-            State
-            <input type="text" id="state" maxlength="2" />
-          </label>
-          <br><br>
-          <label>
-            ZIP
-            <input type="text" id="zip" maxlength="10" />
-          </label>
+    <div class="hr"></div>
+
+    <h3>Fulfillment Method</h3>
+
+    <div class="inline">
+      <label>
+        <input type="radio" name="fulfillment" value="Pickup" checked />
+        Pickup
+      </label>
+
+      <label>
+        <input type="radio" name="fulfillment" value="Delivery" />
+        Delivery
+      </label>
+    </div>
+
+    <div id="deliveryFields" style="display:none; margin-top:12px;">
+      <div class="form-grid">
+        <div class="full">
+          <label>Street Address</label>
+          <input type="text" id="address1" />
         </div>
+
+        <div>
+          <label>City</label>
+          <input type="text" id="city" />
+        </div>
+
+        <div>
+          <label>State</label>
+          <input type="text" id="state" maxlength="2" />
+        </div>
+
+        <div class="full">
+          <label>ZIP</label>
+          <input type="text" id="zip" maxlength="10" />
+        </div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <h3>Payment (Simulated)</h3>
+
+    <div class="form-grid">
+      <div class="full">
+        <label>Cardholder Name</label>
+        <input type="text" id="cardName" required />
+      </div>
+
+      <div class="full">
+        <label>Card Number</label>
+        <input type="text" id="cardNumber" required />
+      </div>
+
+      <div>
+        <label>Expiration</label>
+        <input type="text" id="cardExp" required />
+      </div>
+
+      <div>
+        <label>CVV</label>
+        <input type="text" id="cardCvv" required />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE: Order Summary -->
+  <div class="card">
+    <h3>Order Summary</h3>
+
+    <div id="orderSummary"></div>
+
+    <div class="hr"></div>
+
+    <div class="summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong>$<span id="subtotal">0.00</span></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Delivery Fee</span>
+        <strong>$<span id="deliveryFee">0.00</span></strong>
+      </div>
+
+      <div class="summary-row summary-total">
+        <span>Total</span>
+        <strong>$<span id="total">0.00</span></strong>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button class="btn btn-primary" type="submit">
+        Place Order
+      </button>
+    </div>
+
+    <p id="formError" style="color:var(--danger); margin-top:10px;"></p>
+  </div>
+
+</div>
+
 
         <hr>
 
