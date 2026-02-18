@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Base Cabinet | Container Custom Cabinets</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <h1>Container Custom Cabinets</h1>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="shop.html">Shop</a> |
+    <a href="cart.html">Cart</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Custom Base Cabinet</h2>
+
+  <p>Base Price (Standard 32W x 32H x 21D): <strong>$350.00</strong></p>
+
+  <div>
+    <label>Width (inches):
+      <input type="number" id="width" value="32" min="18" max="48">
+    </label>
+  </div>
+
+  <div>
+    <label>Height (inches):
+      <input type="number" id="height" value="32" min="24" max="40">
+    </label>
+  </div>
+
+  <div>
+    <label>Depth (inches):
+      <input type="number" id="depth" value="21" min="18" max="26">
+    </label>
+  </div>
+
+  <div>
+    <label>Finish:
+      <select id="finish">
+        <option>Paint Grade</option>
+        <option>Stain Grade</option>
+      </select>
+    </label>
+  </div>
+
+  <h3>Total Price: $<span id="price">350.00</span></h3>
+
+  <button id="addToCart">Add to Cart</button>
+
+  <p>
+    Built to fit non-standard spaces. Ideal for custom kitchen layouts.
+  </p>
+
+</main>
+
+<script type="module">
+  import { calculatePrice } from "./pricing.js";
+
+  const basePrice = 350;
+
+  const rules = {
+    standardSize: { w: 32, h: 32, d: 21 },
+    sizeUpcharge: { perInchW: 6, perInchH: 4, perInchD: 8 },
+    stainGradeUpchargeRate: 0.15
+  };
+
+  const minSize = { w: 18, h: 24, d: 18 };
+  const maxSize = { w: 48, h: 40, d: 26 };
+
+  function updatePrice() {
+    const size = {
+      w: document.getElementById("width").value,
+      h: document.getElementById("height").value,
+      d: document.getElementById("depth").value
+    };
+
+    const finish = document.getElementById("finish").value;
+
+    const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
+
+    document.getElementById("price").textContent = result.price.toFixed(2);
+  }
+
+  document.getElementById("width").addEventListener("input", updatePrice);
+  document.getElementById("height").addEventListener("input", updatePrice);
+  document.getElementById("depth").addEventListener("input", updatePrice);
+  document.getElementById("finish").addEventListener("change", updatePrice);
+
+  updatePrice();
+</script>
+
+</body>
+</html>
