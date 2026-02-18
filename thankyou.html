@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmation | Container Custom Cabinets</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Container Custom Cabinets</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="product.html">Product</a> |
+      <a href="shop.html">Shop</a> |
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Thank You</h2>
+    <p>Your order has been placed (simulated).</p>
+
+    <p><strong>Order Number:</strong> <span id="orderId"></span></p>
+    <p><strong>Fulfillment:</strong> <span id="fulfillment"></span></p>
+
+    <h3>Order Summary</h3>
+    <div id="summary"></div>
+
+    <p style="margin-top:12px;">
+      <strong>Note:</strong> This website uses a simulated checkout for the class project. A real payment gateway can be integrated later.
+    </p>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("id");
+    document.getElementById("orderId").textContent = orderId || "N/A";
+
+    const orders = JSON.parse(localStorage.getItem("ccc_orders_v1") || "[]");
+    const order = orders.find(o => o.id === orderId);
+
+    if (order) {
+      document.getElementById("fulfillment").textContent = order.fulfillment;
+      const summaryDiv = document.getElementById("summary");
+      summaryDiv.innerHTML = order.items.map(item =>
+        `<p>${item.qty}x ${item.name} - ${item.size.w}"W x ${item.size.h}"H x ${item.size.d}"D - ${item.finish} - $${item.unitPrice.toFixed(2)}</p>`
+      ).join("") + `<p><strong>Total:</strong> $${order.total.toFixed(2)}</p>`;
+    } else {
+      document.getElementById("fulfillment").textContent = "N/A";
+      document.getElementById("summary").textContent = "Order details not found.";
+    }
+  </script>
+</body>
+</html>
