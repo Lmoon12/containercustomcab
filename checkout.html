@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout | Container Custom Cabinets</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Container Custom Cabinets</h1>
+    <nav>
+      <a href="index.html">Home</a> |
+      <a href="product.html">Product</a> |
+      <a href="cart.html">Cart</a> |
+      <a href="checkout.html">Checkout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Checkout</h2>
+    <p><strong>Note:</strong> This checkout is simulated for the class project. Payment is not processed.</p>
+
+    <div id="emptyCartMsg" style="display:none;">
+      <p>Your cart is empty. Please add an item before checking out.</p>
+      <a href="product.html">Go to Product</a>
+    </div>
+
+    <div id="checkoutWrap" style="display:none;">
+      <h3>Customer Information</h3>
+      <form id="checkoutForm">
+        <label>
+          Full Name
+          <input type="text" id="fullName" required />
+        </label>
+        <br><br>
+
+        <label>
+          Email
+          <input type="email" id="email" required />
+        </label>
+        <br><br>
+
+        <label>
+          Phone
+          <input type="tel" id="phone" required />
+        </label>
+
+        <hr>
+
+        <h3>Fulfillment Method</h3>
+        <label>
+          <input type="radio" name="fulfillment" value="Pickup" checked />
+          Pickup
+        </label>
+        <label style="margin-left:12px;">
+          <input type="radio" name="fulfillment" value="Delivery" />
+          Delivery
+        </label>
+
+        <div id="deliveryFields" style="display:none; margin-top:12px;">
+          <h4>Delivery Address</h4>
+          <label>
+            Street Address
+            <input type="text" id="address1" />
+          </label>
+          <br><br>
+          <label>
+            City
+            <input type="text" id="city" />
+          </label>
+          <br><br>
+          <label>
+            State
+            <input type="text" id="state" maxlength="2" />
+          </label>
+          <br><br>
+          <label>
+            ZIP
+            <input type="text" id="zip" maxlength="10" />
+          </label>
+        </div>
+
+        <hr>
+
+        <h3>Payment (Simulated)</h3>
+        <p style="font-size:0.95rem;">
+          Card fields are included for realism. No payment is processed. A real payment gateway (Stripe/PayPal) can be integrated later.
+        </p>
+
+        <label>
+          Cardholder Name
+          <input type="text" id="cardName" placeholder="Name on card" required />
+        </label>
+        <br><br>
+
+        <label>
+          Card Number
+          <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" required />
+        </label>
+        <br><br>
+
+        <label>
+          Expiration (MM/YY)
+          <input type="text" id="cardExp" placeholder="MM/YY" required />
+        </label>
+        <br><br>
+
+        <label>
+          CVV
+          <input type="text" id="cardCvv" placeholder="123" inputmode="numeric" required />
+        </label>
+
+        <hr>
+
+        <h3>Order Summary</h3>
+        <div id="orderSummary"></div>
+        <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
+        <p><strong>Estimated Delivery Fee:</strong> $<span id="deliveryFee">0.00</span></p>
+        <p><strong>Total:</strong> $<span id="total">0.00</span></p>
+
+        <button type="submit" style="margin-top:12px;">Place Order</button>
+        <p id="formError" style="color:red; margin-top:10px;"></p>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="./checkout.js"></script>
+</body>
+</html>
