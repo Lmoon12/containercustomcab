@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Base Cabinet | Container Custom Cabinets</title>
+  <title>Custom Cabinet | Container Custom Cabinets</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,25 +28,34 @@
 </header>
 
 <main class="container section">
-  <h2>Custom Base Cabinet</h2>
+  <h2>Custom Cabinet</h2>
 
-  <p>Base Price (Standard 32W x 32H x 21D): <strong>$350.00</strong></p>
+  <p id="basePriceLabel">Base Price (Standard 32W x 32H x 21D): <strong>$350.00</strong></p>
+
+  <div>
+    <label>Cabinet Type:
+      <select id="cabinetType">
+        <option value="base">Base Cabinet</option>
+        <option value="wall">Wall Cabinet</option>
+      </select>
+    </label>
+  </div>
 
   <div>
     <label>Width (inches):
-      <input type="number" id="width" value="32" min="18" max="48">
+      <input type="number" id="width" value="32" min="12" max="48">
     </label>
   </div>
 
   <div>
     <label>Height (inches):
-      <input type="number" id="height" value="32" min="24" max="40">
+      <input type="number" id="height" value="32" min="12" max="42">
     </label>
   </div>
 
   <div>
     <label>Depth (inches):
-      <input type="number" id="depth" value="21" min="18" max="26">
+      <input type="number" id="depth" value="21" min="10" max="26">
     </label>
   </div>
 
@@ -64,7 +73,8 @@
   <button id="addToCart">Add to Cart</button>
 
   <p>
-    Built to fit non-standard spaces. Ideal for custom kitchen layouts.
+    Built to fit non-standard spaces. Choose Base or Wall cabinets, configure dimensions,
+    and select finish type. Pricing increases when dimensions exceed the standard size.
   </p>
 </main>
 
@@ -72,36 +82,57 @@
   import { calculatePrice } from "./pricing.js";
   import { addToCart } from "./cart-utils.js";
 
-  const basePrice = 350;
-
-  const rules = {
-    standardSize: { w: 32, h: 32, d: 21 },
-    sizeUpcharge: { perInchW: 6, perInchH: 4, perInchD: 8 },
-    stainGradeUpchargeRate: 0.15
+  const cabinetConfigs = {
+    base: {
+      name: "Custom Base Cabinet",
+      id: "base-cabinet",
+      basePrice: 350,
+      minSize: { w: 18, h: 24, d: 18 },
+      maxSize: { w: 48, h: 40, d: 26 },
+      rules: {
+        standardSize: { w: 32, h: 32, d: 21 },
+        sizeUpcharge: { perInchW: 6, perInchH: 4, perInchD: 8 },
+        stainGradeUpchargeRate: 0.15
+      }
+    },
+    wall: {
+      name: "Custom Wall Cabinet",
+      id: "wall-cabinet",
+      basePrice: 300,
+      minSize: { w: 12, h: 12, d: 10 },
+      maxSize: { w: 48, h: 42, d: 24 },
+      rules: {
+        standardSize: { w: 32, h: 24, d: 18 },
+        sizeUpcharge: { perInchW: 6, perInchH: 4, perInchD: 8 },
+        stainGradeUpchargeRate: 0.15
+      }
+    }
   };
 
-  const minSize = { w: 18, h: 24, d: 18 };
-  const maxSize = { w: 48, h: 40, d: 26 };
+  function setInputLimits(config) {
+    const w = document.getElementById("width");
+    const h = document.getElementById("height");
+    const d = document.getElementById("depth");
 
-  function updatePrice() {
-    const size = {
-      w: document.getElementById("width").value,
-      h: document.getElementById("height").value,
-      d: document.getElementById("depth").value
-    };
-
-    const finish = document.getElementById("finish").value;
-
-    const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
-    document.getElementById("price").textContent = result.price.toFixed(2);
+    w.min = config.minSize.w; w.max = config.maxSize.w;
+    h.min = config.minSize.h; h.max = config.maxSize.h;
+    d.min = config.minSize.d; d.max = config.maxSize.d;
   }
 
-  document.getElementById("width").addEventListener("input", updatePrice);
-  document.getElementById("height").addEventListener("input", updatePrice);
-  document.getElementById("depth").addEventListener("input", updatePrice);
-  document.getElementById("finish").addEventListener("change", updatePrice);
+  function updateBaseLabel(config) {
+    const std = config.rules.standardSize;
+    document.getElementById("basePriceLabel").innerHTML =
+      `Base Price (Standard ${std.w}W x ${std.h}H x ${std.d}D): <strong>$${config.basePrice.toFixed(2)}</strong>`;
+  }
 
-  document.getElementById("addToCart").addEventListener("click", () => {
+  function getSelectedConfig() {
+    const type = document.getElementById("cabinetType").value;
+    return cabinetConfigs[type];
+  }
+
+  function updatePrice() {
+    const config = getSelectedConfig();
+
     const size = {
       w: Number(document.getElementById("width").value),
       h: Number(document.getElementById("height").value),
@@ -110,11 +141,61 @@
 
     const finish = document.getElementById("finish").value;
 
-    const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
+    const result = calculatePrice(
+      config.basePrice,
+      size,
+      finish,
+      config.rules,
+      config.minSize,
+      config.maxSize
+    );
+
+    document.getElementById("price").textContent = result.price.toFixed(2);
+  }
+
+  document.getElementById("cabinetType").addEventListener("change", () => {
+    const config = getSelectedConfig();
+
+    // update input min/max for the selected cabinet type
+    setInputLimits(config);
+
+    // set default dimensions to standard for selected type
+    document.getElementById("width").value = config.rules.standardSize.w;
+    document.getElementById("height").value = config.rules.standardSize.h;
+    document.getElementById("depth").value = config.rules.standardSize.d;
+
+    updateBaseLabel(config);
+    updatePrice();
+  });
+
+  document.getElementById("width").addEventListener("input", updatePrice);
+  document.getElementById("height").addEventListener("input", updatePrice);
+  document.getElementById("depth").addEventListener("input", updatePrice);
+  document.getElementById("finish").addEventListener("change", updatePrice);
+
+  document.getElementById("addToCart").addEventListener("click", () => {
+    const config = getSelectedConfig();
+
+    const size = {
+      w: Number(document.getElementById("width").value),
+      h: Number(document.getElementById("height").value),
+      d: Number(document.getElementById("depth").value)
+    };
+
+    const finish = document.getElementById("finish").value;
+
+    const result = calculatePrice(
+      config.basePrice,
+      size,
+      finish,
+      config.rules,
+      config.minSize,
+      config.maxSize
+    );
 
     addToCart({
-      id: "base-cabinet",
-      name: "Custom Base Cabinet",
+      id: config.id,
+      name: config.name,
       size: result.normalizedSize,
       finish: finish,
       unitPrice: result.price,
@@ -124,7 +205,13 @@
     window.location.href = "cart.html";
   });
 
-  updatePrice();
+  // Initial load: set correct limits/labels for default type (base)
+  (function init() {
+    const config = getSelectedConfig();
+    setInputLimits(config);
+    updateBaseLabel(config);
+    updatePrice();
+  })();
 </script>
 
 </body>
