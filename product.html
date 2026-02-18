@@ -59,7 +59,9 @@
 </main>
 
 <script type="module">
-  import { calculatePrice } from "./pricing.js";
+    import { calculatePrice } from "./pricing.js";
+    import { addToCart } from "./cart-utils.js";
+
 
   const basePrice = 350;
 
@@ -90,6 +92,29 @@
   document.getElementById("height").addEventListener("input", updatePrice);
   document.getElementById("depth").addEventListener("input", updatePrice);
   document.getElementById("finish").addEventListener("change", updatePrice);
+document.getElementById("addToCart").addEventListener("click", () => {
+  const size = {
+    w: Number(document.getElementById("width").value),
+    h: Number(document.getElementById("height").value),
+    d: Number(document.getElementById("depth").value)
+  };
+
+  const finish = document.getElementById("finish").value;
+
+  const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
+
+  addToCart({
+    id: "base-cabinet",
+    name: "Custom Base Cabinet",
+    size: result.normalizedSize,
+    finish: finish,
+    unitPrice: result.price,
+    qty: 1
+  });
+
+  // Redirect to cart (Option B)
+  window.location.href = "cart.html";
+});
 
   updatePrice();
 </script>
