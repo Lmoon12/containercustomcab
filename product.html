@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Custom Base Cabinet | Container Custom Cabinets</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -25,7 +26,6 @@
     </div>
   </div>
 </header>
-
 
 <main class="container section">
   <h2>Custom Base Cabinet</h2>
@@ -66,13 +66,11 @@
   <p>
     Built to fit non-standard spaces. Ideal for custom kitchen layouts.
   </p>
-
 </main>
 
 <script type="module">
-    import { calculatePrice } from "./pricing.js";
-    import { addToCart } from "./cart-utils.js";
-
+  import { calculatePrice } from "./pricing.js";
+  import { addToCart } from "./cart-utils.js";
 
   const basePrice = 350;
 
@@ -95,7 +93,6 @@
     const finish = document.getElementById("finish").value;
 
     const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
-
     document.getElementById("price").textContent = result.price.toFixed(2);
   }
 
@@ -103,34 +100,32 @@
   document.getElementById("height").addEventListener("input", updatePrice);
   document.getElementById("depth").addEventListener("input", updatePrice);
   document.getElementById("finish").addEventListener("change", updatePrice);
-document.getElementById("addToCart").addEventListener("click", () => {
-  const size = {
-    w: Number(document.getElementById("width").value),
-    h: Number(document.getElementById("height").value),
-    d: Number(document.getElementById("depth").value)
-  };
 
-  const finish = document.getElementById("finish").value;
+  document.getElementById("addToCart").addEventListener("click", () => {
+    const size = {
+      w: Number(document.getElementById("width").value),
+      h: Number(document.getElementById("height").value),
+      d: Number(document.getElementById("depth").value)
+    };
 
-  const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
+    const finish = document.getElementById("finish").value;
 
-  addToCart({
-    id: "base-cabinet",
-    name: "Custom Base Cabinet",
-    size: result.normalizedSize,
-    finish: finish,
-    unitPrice: result.price,
-    qty: 1
+    const result = calculatePrice(basePrice, size, finish, rules, minSize, maxSize);
+
+    addToCart({
+      id: "base-cabinet",
+      name: "Custom Base Cabinet",
+      size: result.normalizedSize,
+      finish: finish,
+      unitPrice: result.price,
+      qty: 1
+    });
+
+    window.location.href = "cart.html";
   });
-
-  // Redirect to cart (Option B)
-  window.location.href = "cart.html";
-});
 
   updatePrice();
 </script>
 
 </body>
 </html>
-
-
