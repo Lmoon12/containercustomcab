@@ -1,256 +1,418 @@
+<!--
+UPDATED: Real Pricing Logic Integrated
+- Base/Vanity standard: 24W x 32H x 21D = $100
+- +$15 per inch increase (any dimension over standard)
+- Material: non-maple = +15%
+- Wall cabinet standard: 24W x 24H x 15D (base price assumed $80 for now)
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Container Custom Cabinets | Custom Cabinets & Built-ins</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Custom Cabinets</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: Arial; margin:0; background:#f7f7f7; }
+    header { background:#1f2937; color:white; padding:20px; text-align:center; }
+    .container { padding:20px; max-width:1100px; margin:auto; }
+    .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+    .card { background:white; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    select,input { width:100%; padding:8px; margin:5px 0; }
+    button { background:#2563eb; color:white; border:none; padding:10px; cursor:pointer; width:100%; }
+    button:hover { background:#1d4ed8; }
+    .price { font-size:20px; font-weight:bold; margin:10px 0; }
+    .cart { position:fixed; top:20px; right:20px; background:white; padding:10px; border-radius:8px; }
+  </style>
 </head>
-
 <body>
- <header class="site-header">
-  <div class="container nav">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="brand-title">
-        <strong>Container Custom Cabinets</strong>
-        <span>Custom cabinetry - simulated checkout</span>
-      </div>
-    </div>
 
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="product.html">Product</a>
-      <a href="cart.html">Cart</a>
-      <a href="checkout.html">Checkout</a>
-    </div>
-  </div>
+<header>
+  <h1>Container Custom Cabinets</h1>
+  <p>Custom Built Cabinets - Designed for Your Space</p>
 </header>
 
+<div class="cart">
+  🛒 Cart: <span id="cartCount">0</span>
+</div>
 
-  <!-- Hero -->
-  <main class="container section">
-      <div class="container section">
+<div class="container">
+  <div class="products">
 
-    <!-- HERO SECTION START -->
-    <section class="hero">
-      <div class="hero-wrap">
+    <!-- BASE CABINET -->
+    <div class="card" data-type="base">
+      <h2>Base Cabinet</h2>
+      <label>Width</label>
+      <input type="number" value="24" class="width">
+      <label>Height</label>
+      <input type="number" value="32" class="height">
+      <label>Depth</label>
+      <input type="number" value="21" class="depth">
 
-        <div class="card">
-          <span class="badge">Custom, non-production cabinetry</span>
-          <h1>Built-to-fit cabinets for real spaces</h1>
+      <label>Material</label>
+      <select class="material">
+        <option value="maple">Maple (Standard)</option>
+        <option value="premium">Stain Grade / Other</option>
+      </select>
 
-          <p class="lead">
-            Configure sizing and finish, add to cart, and place a simulated order.
-            Designed for a real-world small business concept.
-          </p>
+      <label>Door Style</label>
+      <select class="doorStyle">
+        <option value="shaker">Shaker</option>
+        <option value="slimShaker">Slim Shaker</option>
+        <option value="raisedPanel">Raised Panel</option>
+        <option value="slab">Slab</option>
+      </select>
 
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="product.html">
-              Configure a Cabinet
-            </a>
+      <label>Finish</label>
+      <select class="finish">
+        <option value="unfinished">Unfinished</option>
+        <option value="painted">Painted</option>
+        <option value="stained">Stained</option>
+        <option value="primed">Primed</option>
+      </select>
 
-            <a class="btn" href="cart.html">
-              View Cart
-            </a>
-          </div>
-        </div>
+      <label>Drawer Count</label>
+      <input type="number" min="0" value="0" class="drawerCount">
 
-        <div class="hero-media">
-          <div class="overlay">
-            <p class="small">
-              Container-based workshop • Upstate South Carolina
-            </p>
-          </div>
-        </div>
+      <label><input type="checkbox" class="softClose"> Soft-Close Hardware</label>
+      <label><input type="checkbox" class="finishedEnds"> Finished Ends</label>
+      <label><input type="checkbox" class="plywoodBox"> Plywood Box Upgrade</label>
+      <label><input type="checkbox" class="pulloutShelf"> Pull-Out Shelf</label>
 
-      </div>
-    </section>
-    <!-- HERO SECTION END -->
-
-        <div class="hero-card">
-          <p class="hero-card-title">Quick info</p>
-          <div class="hero-card-row"><span>Service area:</span><span>Upstate SC</span></div>
-          <div class="hero-card-row"><span>Specialty:</span><span>Custom, non-production cabinetry</span></div>
-          <div class="hero-card-row"><span>Estimates:</span><span>Available</span></div>
-          <p class="hero-card-note">Built from a container-based workshop.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section class="section" id="about">
-      <div class="container">
-        <h2>About</h2>
-        <p>
-          Container Custom Cabinets began as a side hobby focused on building custom cabinetry
-          and built-ins from a repurposed shipping container workshop. This website was created
-          to make the business more official and usable in real-world situations, allowing
-          customers to view work, request custom builds, and communicate clearly online.
-        </p>
-
-        <div class="about-grid">
-          <div class="card">
-            <h3>What we build</h3>
-            <p>
-              Kitchen cabinets, bathroom vanities, mudroom lockers, shelving,
-              entertainment centers, office built-ins, and other custom solutions.
-            </p>
-          </div>
-          <div class="card">
-            <h3>How it works</h3>
-            <p>
-              Measure, design, build, finish, and install.
-              Projects are handled with clear communication and realistic timelines.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Materials</h3>
-            <p>
-              Common materials include plywood cabinet boxes, hardwood face frames,
-              and durable finishes selected based on budget and use case.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section class="section" id="projects">
-      <div class="container">
-        <h2>Projects</h2>
-
-        <div class="grid">
-          <article class="project card">
-            <img src="images/project1.jpg" alt="Kitchen cabinet project" />
-            <div class="project-body">
-              <h3>Custom Kitchen Cabinets</h3>
-              <p>Inset-style cabinetry built for a clean, modern layout.</p>
-              <ul class="tags">
-                <li>Kitchen</li><li>Custom</li><li>Install</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="project card">
-            <img src="images/project2.jpg" alt="Built-in shelving project" />
-            <div class="project-body">
-              <h3>Overlay Cabinets</h3>
-              <p>Traditional overlay cabinetry with a durable painted finish.</p>
-              <ul class="tags">
-                <li>Built-ins</li><li>Storage</li><li>Finish</li>
-              </ul>
-            </div>
-          </article>
-
-          <article class="project card">
-            <img src="images/project3.jpg" alt="Bar cart project" />
-            <div class="project-body">
-              <h3>Custom Furniture</h3>
-              <p>One-off furniture projects designed to fit specific needs.</p>
-              <ul class="tags">
-                <li>Furniture</li><li>Custom</li><li>Design</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services -->
-    <section class="section" id="services">
-      <div class="container">
-        <h2>Services</h2>
-
-        <div class="services-grid">
-          <div class="card">
-            <h3>Custom cabinetry</h3>
-            <p>Cabinets built to fit unique spaces and non-standard dimensions.</p>
-          </div>
-          <div class="card">
-            <h3>Built-ins</h3>
-            <p>Mudrooms, shelving walls, entertainment centers, and office built-ins.</p>
-          </div>
-          <div class="card">
-            <h3>Install and support</h3>
-            <p>Installation assistance, adjustments, and upgrade work.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="container">
-        <h2>Contact</h2>
-
-        <form class="contact-form" action="#" method="post">
-          <div class="form-grid">
-            <label>
-              Name
-              <input type="text" name="name" required />
-            </label>
-
-            <label>
-              Email
-              <input type="email" name="email" required />
-            </label>
-
-            <label>
-              Phone (optional)
-              <input type="tel" name="phone" />
-            </label>
-
-            <label>
-              Project type
-              <select name="type">
-                <option>Kitchen cabinets</option>
-                <option>Built-ins / shelving</option>
-                <option>Bathroom vanity</option>
-                <option>Other custom work</option>
-              </select>
-            </label>
-
-            <label class="full">
-              Project details
-              <textarea name="message" rows="6"
-                placeholder="Describe your project, approximate dimensions, timeline, and location."></textarea>
-            </label>
-          </div>
-
-          <button class="btn" type="submit">Send Request</button>
-          <p class="fine-print">
-            Tip: including photos and rough measurements helps speed up estimates.
-          </p>
-        </form>
-      </div>
-    </section>
-
-    <!-- Disclaimer -->
-    <section class="section">
-      <div class="container">
-        <p style="font-size: 0.9rem; color: #555; text-align: center;">
-          <strong>Disclaimer:</strong> This website was created as part of a school project.
-          Content and services are presented for demonstration purposes while also reflecting
-          a real-world small business concept.
-        </p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-row">
-      <p>© <span id="year"></span> Container Custom Cabinets</p>
-      <p class="muted">Built with HTML and CSS</p>
+      <div class="price">$<span class="priceValue">0</span></div>
+      <button onclick="addToCart(this)">Add to Cart</button>
     </div>
-  </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+    <!-- WALL CABINET -->
+    <div class="card" data-type="wall">
+      <h2>Wall Cabinet</h2>
+      <label>Width</label>
+      <input type="number" value="24" class="width">
+      <label>Height</label>
+      <input type="number" value="24" class="height">
+      <label>Depth</label>
+      <input type="number" value="15" class="depth">
+
+      <label>Material</label>
+      <select class="material">
+        <option value="maple">Maple (Standard)</option>
+        <option value="premium">Stain Grade / Other</option>
+      </select>
+
+      <label>Door Style</label>
+      <select class="doorStyle">
+        <option value="shaker">Shaker</option>
+        <option value="slimShaker">Slim Shaker</option>
+        <option value="raisedPanel">Raised Panel</option>
+        <option value="slab">Slab</option>
+      </select>
+
+      <label>Finish</label>
+      <select class="finish">
+        <option value="unfinished">Unfinished</option>
+        <option value="painted">Painted</option>
+        <option value="stained">Stained</option>
+        <option value="primed">Primed</option>
+      </select>
+
+      <label>Drawer Count</label>
+      <input type="number" min="0" value="0" class="drawerCount">
+
+      <label><input type="checkbox" class="softClose"> Soft-Close Hardware</label>
+      <label><input type="checkbox" class="finishedEnds"> Finished Ends</label>
+      <label><input type="checkbox" class="plywoodBox"> Plywood Box Upgrade</label>
+      <label><input type="checkbox" class="pulloutShelf"> Pull-Out Shelf</label>
+
+      <div class="price">$<span class="priceValue">0</span></div>
+      <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <!-- VANITY -->
+    <div class="card" data-type="vanity">
+      <h2>Vanity</h2>
+      <label>Width</label>
+      <input type="number" value="24" class="width">
+      <label>Height</label>
+      <input type="number" value="32" class="height">
+      <label>Depth</label>
+      <input type="number" value="21" class="depth">
+
+      <label>Material</label>
+      <select class="material">
+        <option value="maple">Maple (Standard)</option>
+        <option value="premium">Stain Grade / Other</option>
+      </select>
+
+      <label>Door Style</label>
+      <select class="doorStyle">
+        <option value="shaker">Shaker</option>
+        <option value="slimShaker">Slim Shaker</option>
+        <option value="raisedPanel">Raised Panel</option>
+        <option value="slab">Slab</option>
+      </select>
+
+      <label>Finish</label>
+      <select class="finish">
+        <option value="unfinished">Unfinished</option>
+        <option value="painted">Painted</option>
+        <option value="stained">Stained</option>
+        <option value="primed">Primed</option>
+      </select>
+
+      <label>Drawer Count</label>
+      <input type="number" min="0" value="0" class="drawerCount">
+
+      <label><input type="checkbox" class="softClose"> Soft-Close Hardware</label>
+      <label><input type="checkbox" class="finishedEnds"> Finished Ends</label>
+      <label><input type="checkbox" class="plywoodBox"> Plywood Box Upgrade</label>
+      <label><input type="checkbox" class="pulloutShelf"> Pull-Out Shelf</label>
+
+      <div class="price">$<span class="priceValue">0</span></div>
+      <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+  </div>
+
+  <br>
+  <button onclick="goToCheckout()">Proceed to Checkout</button>
+</div>
+
+<script>
+const EMAILJS_PUBLIC_KEY = 'REPLACE_WITH_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID = 'REPLACE_WITH_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'REPLACE_WITH_TEMPLATE_ID';
+
+if (window.emailjs) {
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+}
+
+function calculatePrice(type, w, h, d, material, upgrades) {
+  const standards = {
+    base: { w: 24, h: 32, d: 21, base: 100 },
+    vanity: { w: 24, h: 32, d: 21, base: 100 },
+    wall: { w: 24, h: 24, d: 15, base: 80 }
+  };
+
+  const std = standards[type];
+
+  let extraInches = 0;
+  extraInches += Math.max(0, w - std.w);
+  extraInches += Math.max(0, h - std.h);
+  extraInches += Math.max(0, d - std.d);
+
+  let price = std.base + (extraInches * 15);
+
+  if (material !== 'maple') {
+    price *= 1.15;
+  }
+
+  if (upgrades.softClose) price += 25;
+  if (upgrades.finishedEnds) price += 35;
+  if (upgrades.plywoodBox) price += 45;
+  if (upgrades.pulloutShelf) price += 55;
+  if (upgrades.sinkBase) price += 30;
+
+  price += upgrades.drawerCount * 40;
+
+  const doorStylePricing = {
+    shaker: 0,
+    slimShaker: 20,
+    raisedPanel: 35,
+    slab: 10
+  };
+
+  const finishPricing = {
+    unfinished: 0,
+    painted: 85,
+    stained: 110,
+    primed: 45
+  };
+
+  price += doorStylePricing[upgrades.doorStyle] || 0;
+  price += finishPricing[upgrades.finish] || 0;
+
+  return Math.round(price);
+}
+
+function getUpgrades(card) {
+  return {
+    doorStyle: card.querySelector('.doorStyle').value,
+    finish: card.querySelector('.finish').value,
+    drawerCount: Number(card.querySelector('.drawerCount').value || 0),
+    softClose: card.querySelector('.softClose').checked,
+    finishedEnds: card.querySelector('.finishedEnds').checked,
+    plywoodBox: card.querySelector('.plywoodBox').checked,
+    pulloutShelf: card.querySelector('.pulloutShelf').checked,
+    sinkBase: card.querySelector('.sinkBase') ? card.querySelector('.sinkBase').checked : false
+  };
+}
+
+function updateCardPrice(card) {
+  const type = card.dataset.type;
+  const w = Number(card.querySelector('.width').value || 0);
+  const h = Number(card.querySelector('.height').value || 0);
+  const d = Number(card.querySelector('.depth').value || 0);
+  const material = card.querySelector('.material').value;
+  const upgrades = getUpgrades(card);
+  const price = calculatePrice(type, w, h, d, material, upgrades);
+  card.querySelector('.priceValue').innerText = price;
+}
+
+function bindCard(card) {
+  card.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', () => updateCardPrice(card));
+    el.addEventListener('change', () => updateCardPrice(card));
+  });
+  updateCardPrice(card);
+}
+
+document.querySelectorAll('.card').forEach(bindCard);
+
+let cart = [];
+
+function addToCart(button) {
+  const card = button.parentElement;
+  const upgrades = getUpgrades(card);
+
+  const item = {
+    type: card.dataset.type,
+    width: card.querySelector('.width').value,
+    height: card.querySelector('.height').value,
+    depth: card.querySelector('.depth').value,
+    material: card.querySelector('.material').value,
+    upgrades,
+    price: card.querySelector('.priceValue').innerText
+  };
+
+  cart.push(item);
+  document.getElementById('cartCount').innerText = cart.length;
+}
+
+function goToCheckout() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+  window.location.href = 'checkout.html';
+}
+</script>
+
+<!-- ================= CART PAGE LOGIC ================= -->
+<script>
+// If on checkout page, render cart
+if (window.location.pathname.includes('checkout.html')) {
+  const cartData = JSON.parse(localStorage.getItem('cart') || '[]');
+  const container = document.createElement('div');
+  container.style.maxWidth = '900px';
+  container.style.margin = '40px auto';
+  container.innerHTML = '<h2>Order Summary</h2>';
+
+  let total = 0;
+
+  cartData.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.style.background = 'white';
+    div.style.padding = '15px';
+    div.style.marginBottom = '10px';
+    div.style.borderRadius = '8px';
+
+    total += Number(item.price);
+
+    div.innerHTML = `
+      <strong>${item.type.toUpperCase()}</strong><br>
+      ${item.width}" x ${item.height}" x ${item.depth}"<br>
+      Material: ${item.material}<br>
+      Price: $${item.price}
+    `;
+
+    container.appendChild(div);
+  });
+
+  const totalDiv = document.createElement('h3');
+  totalDiv.innerText = `Total: $${total}`;
+  container.appendChild(totalDiv);
+
+  const form = document.createElement('form');
+  form.innerHTML = `
+    <h3>Customer Info</h3>
+    <input name="fullName" placeholder="Full Name" required><br><br>
+    <input name="email" type="email" placeholder="Email" required><br><br>
+    <input name="phone" placeholder="Phone" required><br><br>
+    <input name="city" placeholder="City / Job Location"><br><br>
+    <textarea name="notes" placeholder="Notes / Measurements / Special Requests"></textarea><br><br>
+    <button type="submit">Submit Order Request</button>
+    <p style="font-size:14px;color:#555;line-height:1.5;">
+      This submits an order request only. Final pricing, lead time, and project details will be confirmed before production.
+    </p>
+  `;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitButton = form.querySelector('button');
+    submitButton.disabled = true;
+    submitButton.innerText = 'Submitting...';
+
+    const formData = new FormData(form);
+    const customerName = formData.get('fullName') || '';
+    const customerEmail = formData.get('email') || '';
+    const customerPhone = formData.get('phone') || '';
+    const customerCity = formData.get('city') || '';
+    const customerNotes = formData.get('notes') || '';
+
+    const orderLines = cartData.map((item, index) => {
+      const upgradeParts = [];
+      if (item.upgrades) {
+        if (item.upgrades.doorStyle) upgradeParts.push(`Door Style: ${item.upgrades.doorStyle}`);
+        if (item.upgrades.finish) upgradeParts.push(`Finish: ${item.upgrades.finish}`);
+        if (Number(item.upgrades.drawerCount || 0) > 0) upgradeParts.push(`Drawers: ${item.upgrades.drawerCount}`);
+        if (item.upgrades.softClose) upgradeParts.push('Soft-Close');
+        if (item.upgrades.finishedEnds) upgradeParts.push('Finished Ends');
+        if (item.upgrades.plywoodBox) upgradeParts.push('Plywood Box');
+        if (item.upgrades.pulloutShelf) upgradeParts.push('Pull-Out Shelf');
+        if (item.upgrades.sinkBase) upgradeParts.push('Sink Base Cutout');
+      }
+
+      return `${index + 1}. ${item.type.toUpperCase()} | ${item.width}W x ${item.height}H x ${item.depth}D | Material: ${item.material} | ${upgradeParts.length ? upgradeParts.join(', ') : 'No upgrades'} | Price: $${item.price}`;
+    }).join('
+');
+
+    const templateParams = {
+      customer_name: customerName,
+      customer_email: customerEmail,
+      customer_phone: customerPhone,
+      customer_city: customerCity,
+      customer_notes: customerNotes,
+      order_items: orderLines,
+      order_total: total,
+      business_name: 'Container Custom Cabinets'
+    };
+
+    try {
+      if (
+        !window.emailjs ||
+        EMAILJS_PUBLIC_KEY === 'REPLACE_WITH_PUBLIC_KEY' ||
+        EMAILJS_SERVICE_ID === 'REPLACE_WITH_SERVICE_ID' ||
+        EMAILJS_TEMPLATE_ID === 'REPLACE_WITH_TEMPLATE_ID'
+      ) {
+        throw new Error('EmailJS is not configured yet.');
+      }
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      localStorage.removeItem('cart');
+      window.location.href = 'thankyou.html';
+    } catch (error) {
+      console.error(error);
+      alert('Your order request could not be sent yet. Finish the EmailJS setup keys in the code, then try again.');
+      submitButton.disabled = false;
+      submitButton.innerText = 'Submit Order Request';
+    }
+  });
+
+  container.appendChild(form);
+  document.body.innerHTML = '';
+  document.body.appendChild(container);
+}
+</script>
+
 </body>
 </html>
-
-
-
