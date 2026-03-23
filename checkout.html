@@ -2,215 +2,402 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout | Container Custom Cabinets</title>
-  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --surface: #ffffff;
+      --text: #1f1a17;
+      --muted: #6b625b;
+      --line: #ddd2c4;
+      --brand: #6d4c31;
+      --brand-dark: #4f3623;
+      --brand-light: #b98b61;
+      --shadow: 0 14px 34px rgba(54, 40, 27, 0.10);
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f7f2eb 0%, #f4eee5 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .checkout-shell {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 40px 0 60px;
+    }
+
+    .ghost-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      font-weight: 700;
+      color: var(--brand-dark);
+    }
+
+    .checkout-header {
+      margin-bottom: 20px;
+    }
+
+    .checkout-header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .checkout-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .summary-card,
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .summary-card h2,
+    .form-card h2 {
+      margin: 0 0 16px;
+      font-size: 1.4rem;
+    }
+
+    .summary-item {
+      padding: 18px 0;
+      border-bottom: 1px solid #eadfce;
+    }
+
+    .summary-item:last-of-type {
+      border-bottom: none;
+    }
+
+    .summary-item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+      align-items: start;
+    }
+
+    .summary-item-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #2c221d;
+    }
+
+    .summary-price {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--brand-dark);
+      white-space: nowrap;
+    }
+
+    .summary-meta,
+    .summary-upgrades {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin-top: 4px;
+    }
+
+    .summary-label {
+      font-weight: 700;
+      color: #43382f;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-top: 1px solid #eadfce;
+      margin-top: 18px;
+      padding-top: 18px;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .empty-cart {
+      color: var(--muted);
+      padding: 10px 0 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d7caba;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 2px solid rgba(185, 139, 97, 0.18);
+      border-color: var(--brand-light);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 10px 24px rgba(81, 53, 31, 0.22);
+      transition: transform 0.18s ease, background 0.18s ease;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      background: var(--brand-dark);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .fine-print {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .checkout-shell {
+        width: min(100% - 20px, var(--max));
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-item-top {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-  <div class="container nav">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="brand-title">
-        <strong>Container Custom Cabinets</strong>
-        <span>Custom cabinetry - simulated checkout</span>
-      </div>
+  <div class="checkout-shell">
+    <a class="ghost-link" href="index.html">← Back to cabinet builder</a>
+
+    <div class="checkout-header">
+      <h1>Review your order request</h1>
+      <p>
+        Confirm your cabinet selections and submit your customer details.
+        Final pricing, lead time, and project details will be reviewed before production.
+      </p>
     </div>
 
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="product.html">Product</a>
-      <a href="cart.html">Cart</a>
-      <a href="checkout.html">Checkout</a>
+    <div class="checkout-grid">
+      <section class="summary-card">
+        <h2>Order Summary</h2>
+        <div id="summaryItems"></div>
+        <div class="summary-total">
+          <span>Estimated Total</span>
+          <span id="summaryTotal">$0</span>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <h2>Customer Details</h2>
+        <form id="orderForm">
+          <div class="form-grid">
+            <div><input name="fullName" placeholder="Full Name" required /></div>
+            <div><input name="email" type="email" placeholder="Email Address" required /></div>
+            <div><input name="phone" placeholder="Phone Number" required /></div>
+            <div><input name="city" placeholder="City / Job Location" /></div>
+            <div class="full">
+              <textarea name="notes" placeholder="Project notes, measurements, timeline, or special requests"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn">Submit Order Request</button>
+          <p class="fine-print">
+            This submission is an order request only. Final pricing, lead time, and project details will be confirmed before production.
+          </p>
+        </form>
+      </section>
     </div>
   </div>
-</header>
 
+  <script>
+    const EMAILJS_PUBLIC_KEY = 'zh8Yg87P1oNzc6jE8';
+    const EMAILJS_SERVICE_ID = 'service_fqhcube';
+    const EMAILJS_TEMPLATE_ID = 'template_51jo6pa';
 
-  <main class="container section">
-    <h2>Checkout</h2>
-    <p><strong>Note:</strong> This checkout is simulated for the class project. Payment is not processed.</p>
+    if (window.emailjs) {
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
 
-    <div id="emptyCartMsg" style="display:none;">
-      <p>Your cart is empty. Please add an item before checking out.</p>
-      <a href="product.html">Go to Product</a>
-    </div>
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    <div id="checkoutWrap" style="display:none;">
-      <h3>Customer Information</h3>
-      <form id="checkoutForm">
-       <div class="grid grid-2">
+    function formatType(type) {
+      if (type === 'base') return 'Base Cabinet';
+      if (type === 'wall') return 'Wall Cabinet';
+      if (type === 'vanity') return 'Vanity';
+      return type;
+    }
 
-  <!-- LEFT SIDE: Customer + Payment -->
-  <div class="card">
-    <h3>Customer Information</h3>
+    function formatMaterial(material) {
+      return material === 'maple' ? 'Maple' : 'Stain grade / non-maple';
+    }
 
-    <div class="form-grid">
-      <div class="full">
-        <label>Full Name</label>
-        <input type="text" id="fullName" required />
-      </div>
+    function formatUpgrades(upgrades) {
+      if (!upgrades) return 'No upgrades selected';
 
-      <div>
-        <label>Email</label>
-        <input type="email" id="email" required />
-      </div>
+      const items = [];
+      if (upgrades.doorStyle) items.push(`Door Style: ${upgrades.doorStyle}`);
+      if (upgrades.finish) items.push(`Finish: ${upgrades.finish}`);
+      if (Number(upgrades.drawerCount || 0) > 0) items.push(`Drawers: ${upgrades.drawerCount}`);
+      if (upgrades.softClose) items.push('Soft-close');
+      if (upgrades.finishedEnds) items.push('Finished ends');
+      if (upgrades.plywoodBox) items.push('Plywood box');
+      if (upgrades.pulloutShelf) items.push('Pull-out shelf');
+      if (upgrades.sinkBase) items.push('Sink base cutout');
 
-      <div>
-        <label>Phone</label>
-        <input type="tel" id="phone" required />
-      </div>
-    </div>
+      return items.length ? items.join(' • ') : 'No upgrades selected';
+    }
 
-    <div class="hr"></div>
+    function renderSummary() {
+      const summaryItems = document.getElementById('summaryItems');
+      const summaryTotal = document.getElementById('summaryTotal');
+      const submitBtn = document.getElementById('submitBtn');
 
-    <h3>Fulfillment Method</h3>
+      if (!cart.length) {
+        summaryItems.innerHTML = '<p class="empty-cart">Your cart is currently empty.</p>';
+        summaryTotal.textContent = '$0';
+        submitBtn.disabled = true;
+        return 0;
+      }
 
-    <div class="inline">
-      <label>
-        <input type="radio" name="fulfillment" value="Pickup" checked />
-        Pickup
-      </label>
+      let total = 0;
 
-      <label>
-        <input type="radio" name="fulfillment" value="Delivery" />
-        Delivery
-      </label>
-    </div>
+      summaryItems.innerHTML = cart.map((item) => {
+        total += Number(item.price || 0);
 
-    <div id="deliveryFields" style="display:none; margin-top:12px;">
-      <div class="form-grid">
-        <div class="full">
-          <label>Street Address</label>
-          <input type="text" id="address1" />
-        </div>
+        return `
+          <div class="summary-item">
+            <div class="summary-item-top">
+              <div class="summary-item-title">${formatType(item.type)}</div>
+              <div class="summary-price">$${item.price}</div>
+            </div>
+            <div class="summary-meta">
+              <span class="summary-label">Size:</span>
+              ${item.width}W × ${item.height}H × ${item.depth}D
+            </div>
+            <div class="summary-meta">
+              <span class="summary-label">Material:</span>
+              ${formatMaterial(item.material)}
+            </div>
+            <div class="summary-upgrades">
+              <span class="summary-label">Upgrades:</span>
+              ${formatUpgrades(item.upgrades)}
+            </div>
+          </div>
+        `;
+      }).join('');
 
-        <div>
-          <label>City</label>
-          <input type="text" id="city" />
-        </div>
+      summaryTotal.textContent = `$${total}`;
+      submitBtn.disabled = false;
+      return total;
+    }
 
-        <div>
-          <label>State</label>
-          <input type="text" id="state" maxlength="2" />
-        </div>
+    const total = renderSummary();
 
-        <div class="full">
-          <label>ZIP</label>
-          <input type="text" id="zip" maxlength="10" />
-        </div>
-      </div>
-    </div>
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    <div class="hr"></div>
+      if (!cart.length) return;
 
-    <h3>Payment (Simulated)</h3>
+      const submitButton = document.getElementById('submitBtn');
+      submitButton.disabled = true;
+      submitButton.innerText = 'Submitting...';
 
-    <div class="form-grid">
-      <div class="full">
-        <label>Cardholder Name</label>
-        <input type="text" id="cardName" required />
-      </div>
+      const formData = new FormData(e.target);
 
-      <div class="full">
-        <label>Card Number</label>
-        <input type="text" id="cardNumber" required />
-      </div>
+      const orderLines = cart.map((item, index) =>
+        `${index + 1}. ${formatType(item.type)} | ${item.width}W x ${item.height}H x ${item.depth}D | Material: ${formatMaterial(item.material)} | ${formatUpgrades(item.upgrades)} | Price: $${item.price}`
+      ).join('\n');
 
-      <div>
-        <label>Expiration</label>
-        <input type="text" id="cardExp" required />
-      </div>
+      const templateParams = {
+        customer_name: formData.get('fullName') || '',
+        customer_email: formData.get('email') || '',
+        customer_phone: formData.get('phone') || '',
+        customer_city: formData.get('city') || '',
+        customer_notes: formData.get('notes') || '',
+        order_items: orderLines,
+        order_total: total,
+        business_name: 'Container Custom Cabinets'
+      };
 
-      <div>
-        <label>CVV</label>
-        <input type="text" id="cardCvv" required />
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RIGHT SIDE: Order Summary -->
-  <div class="card">
-    <h3>Order Summary</h3>
-
-    <div id="orderSummary"></div>
-
-    <div class="hr"></div>
-
-    <div class="summary">
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <strong>$<span id="subtotal">0.00</span></strong>
-      </div>
-
-      <div class="summary-row">
-        <span>Delivery Fee</span>
-        <strong>$<span id="deliveryFee">0.00</span></strong>
-      </div>
-
-      <div class="summary-row summary-total">
-        <span>Total</span>
-        <strong>$<span id="total">0.00</span></strong>
-      </div>
-    </div>
-
-    <div style="margin-top:20px;">
-      <button class="btn btn-primary" type="submit">
-        Place Order
-      </button>
-    </div>
-
-    <p id="formError" style="color:var(--danger); margin-top:10px;"></p>
-  </div>
-
-</div>
-
-
-        <hr>
-
-        <h3>Payment (Simulated)</h3>
-        <p style="font-size:0.95rem;">
-          Card fields are included for realism. No payment is processed. A real payment gateway (Stripe/PayPal) can be integrated later.
-        </p>
-
-        <label>
-          Cardholder Name
-          <input type="text" id="cardName" placeholder="Name on card" required />
-        </label>
-        <br><br>
-
-        <label>
-          Card Number
-          <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" required />
-        </label>
-        <br><br>
-
-        <label>
-          Expiration (MM/YY)
-          <input type="text" id="cardExp" placeholder="MM/YY" required />
-        </label>
-        <br><br>
-
-        <label>
-          CVV
-          <input type="text" id="cardCvv" placeholder="123" inputmode="numeric" required />
-        </label>
-
-        <hr>
-
-        <h3>Order Summary</h3>
-        <div id="orderSummary"></div>
-        <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
-        <p><strong>Estimated Delivery Fee:</strong> $<span id="deliveryFee">0.00</span></p>
-        <p><strong>Total:</strong> $<span id="total">0.00</span></p>
-
-        <button type="submit" style="margin-top:12px;">Place Order</button>
-        <p id="formError" style="color:red; margin-top:10px;"></p>
-      </form>
-    </div>
-  </main>
-
-  <script type="module" src="./checkout.js"></script>
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        localStorage.removeItem('cart');
+        window.location.href = 'thankyou.html';
+      } catch (error) {
+        console.error(error);
+        alert('Your order request could not be sent. Double-check EmailJS template settings and try again.');
+        submitButton.disabled = false;
+        submitButton.innerText = 'Submit Order Request';
+      }
+    });
+  </script>
 </body>
 </html>
