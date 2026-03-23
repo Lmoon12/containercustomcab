@@ -16,7 +16,7 @@
       --brand-dark: #4f3623;
       --brand-light: #b98b61;
       --shadow: 0 14px 34px rgba(54, 40, 27, 0.10);
-      --max: 1100px;
+      --max: 1180px;
     }
 
     * { box-sizing: border-box; }
@@ -24,7 +24,7 @@
     body {
       margin: 0;
       font-family: Inter, Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #f7f2eb 0%, #f4eee5 100%);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
     }
@@ -34,57 +34,140 @@
       text-decoration: none;
     }
 
-    .checkout-shell {
+    .topbar {
+      background: #201711;
+      color: #f3ece2;
+      font-size: 14px;
+    }
+
+    .topbar-inner {
       width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
-      padding: 40px 0 60px;
-    }
-
-    .ghost-link {
-      display: inline-flex;
+      min-height: 42px;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-      font-weight: 700;
-      color: var(--brand-dark);
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .checkout-header {
-      margin-bottom: 20px;
+    .topbar-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: #e8d9c4;
     }
 
-    .checkout-header h1 {
+    .hero-strip {
+      background:
+        linear-gradient(rgba(20,16,12,0.58), rgba(20,16,12,0.62)),
+        radial-gradient(circle at top right, rgba(185,139,97,0.20), transparent 40%),
+        linear-gradient(135deg, #3b2b20 0%, #241912 100%);
+      color: white;
+      padding: 26px 0 38px;
+    }
+
+    .shell {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand-light), #8a5f38);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff7ef;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: #eadfce;
+      font-size: 15px;
+    }
+
+    .hero-strip h1 {
       margin: 0 0 8px;
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(2rem, 4vw, 3.1rem);
       letter-spacing: -0.03em;
     }
 
-    .checkout-header p {
+    .hero-strip p {
       margin: 0;
-      color: var(--muted);
+      color: #eadfce;
       max-width: 70ch;
+    }
+
+    .checkout-wrap {
+      margin-top: -18px;
+      padding-bottom: 48px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin: 28px 0 18px;
     }
 
     .checkout-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 22px;
       align-items: start;
     }
 
-    .summary-card,
-    .form-card {
-      background: var(--surface);
+    .card {
+      background: linear-gradient(180deg, #ffffff 0%, #fbf7f2 100%);
       border: 1px solid var(--line);
       border-radius: 22px;
       box-shadow: var(--shadow);
-      padding: 24px;
+      overflow: hidden;
     }
 
-    .summary-card h2,
-    .form-card h2 {
-      margin: 0 0 16px;
+    .card-header {
+      padding: 22px 24px 18px;
+      background: linear-gradient(135deg, #2f2118 0%, #5b412d 100%);
+      color: white;
+    }
+
+    .card-header h2 {
+      margin: 0 0 6px;
       font-size: 1.4rem;
+    }
+
+    .card-header p {
+      margin: 0;
+      color: #eadfce;
+      font-size: 0.95rem;
+    }
+
+    .card-body {
+      padding: 22px 24px 24px;
     }
 
     .summary-item {
@@ -92,20 +175,25 @@
       border-bottom: 1px solid #eadfce;
     }
 
-    .summary-item:last-of-type {
-      border-bottom: none;
+    .summary-item:first-child {
+      padding-top: 0;
     }
 
-    .summary-item-top {
+    .summary-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .summary-top {
       display: flex;
       justify-content: space-between;
       gap: 16px;
+      align-items: flex-start;
       margin-bottom: 8px;
-      align-items: start;
     }
 
-    .summary-item-title {
-      font-size: 1rem;
+    .summary-title {
+      font-size: 1.05rem;
       font-weight: 800;
       color: #2c221d;
     }
@@ -117,14 +205,13 @@
       white-space: nowrap;
     }
 
-    .summary-meta,
-    .summary-upgrades {
+    .summary-line {
       color: var(--muted);
-      font-size: 0.94rem;
+      font-size: 0.95rem;
       margin-top: 4px;
     }
 
-    .summary-label {
+    .label {
       font-weight: 700;
       color: #43382f;
     }
@@ -134,16 +221,57 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      border-top: 1px solid #eadfce;
-      margin-top: 18px;
+      margin-top: 20px;
       padding-top: 18px;
+      border-top: 1px solid #eadfce;
       font-size: 1.15rem;
       font-weight: 800;
     }
 
-    .empty-cart {
+    .empty-state {
       color: var(--muted);
-      padding: 10px 0 0;
+      font-size: 0.98rem;
+    }
+
+    .cart-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover,
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary,
+    button {
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 10px 24px rgba(81, 53, 31, 0.22);
+    }
+
+    .btn-primary:hover,
+    button:hover {
+      background: var(--brand-dark);
+    }
+
+    .btn-secondary {
+      background: #f3ebe1;
+      color: #4f3623;
+      border: 1px solid #e4d7c9;
     }
 
     .form-grid {
@@ -154,6 +282,14 @@
 
     .full {
       grid-column: 1 / -1;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #43382f;
     }
 
     input,
@@ -180,23 +316,8 @@
     }
 
     button {
-      border: none;
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      background: var(--brand);
-      color: white;
-      box-shadow: 0 10px 24px rgba(81, 53, 31, 0.22);
-      transition: transform 0.18s ease, background 0.18s ease;
       width: 100%;
-      margin-top: 16px;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-      background: var(--brand-dark);
+      margin-top: 18px;
     }
 
     button:disabled {
@@ -211,71 +332,138 @@
       margin-top: 12px;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 940px) {
       .checkout-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 640px) {
-      .checkout-shell {
-        width: min(100% - 20px, var(--max));
+    @media (max-width: 680px) {
+      .topbar {
+        display: none;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        display: none;
       }
 
       .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .summary-item-top {
+      .summary-top {
         flex-direction: column;
-        align-items: start;
+        align-items: flex-start;
+      }
+
+      .shell {
+        width: min(100% - 20px, var(--max));
       }
     }
   </style>
 </head>
 <body>
-  <div class="checkout-shell">
-    <a class="ghost-link" href="index.html">← Back to cabinet builder</a>
-
-    <div class="checkout-header">
-      <h1>Review your order request</h1>
-      <p>
-        Confirm your cabinet selections and submit your customer details.
-        Final pricing, lead time, and project details will be reviewed before production.
-      </p>
-    </div>
-
-    <div class="checkout-grid">
-      <section class="summary-card">
-        <h2>Order Summary</h2>
-        <div id="summaryItems"></div>
-        <div class="summary-total">
-          <span>Estimated Total</span>
-          <span id="summaryTotal">$0</span>
-        </div>
-      </section>
-
-      <section class="form-card">
-        <h2>Customer Details</h2>
-        <form id="orderForm">
-          <div class="form-grid">
-            <div><input name="fullName" placeholder="Full Name" required /></div>
-            <div><input name="email" type="email" placeholder="Email Address" required /></div>
-            <div><input name="phone" placeholder="Phone Number" required /></div>
-            <div><input name="city" placeholder="City / Job Location" /></div>
-            <div class="full">
-              <textarea name="notes" placeholder="Project notes, measurements, timeline, or special requests"></textarea>
-            </div>
-          </div>
-
-          <button type="submit" id="submitBtn">Submit Order Request</button>
-          <p class="fine-print">
-            This submission is an order request only. Final pricing, lead time, and project details will be confirmed before production.
-          </p>
-        </form>
-      </section>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div>Custom cabinetry built to order for kitchens, bathrooms, and storage spaces.</div>
+      <div class="topbar-links">
+        <span>Order requests reviewed before production</span>
+        <span>•</span>
+        <span>Pricing updates live</span>
+      </div>
     </div>
   </div>
+
+  <header class="hero-strip">
+    <div class="shell">
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-mark">CC</div>
+          <div>Container Custom Cabinets</div>
+        </div>
+        <div class="nav-links">
+          <a href="index.html#shop">Shop Cabinets</a>
+          <a href="index.html#process">How It Works</a>
+          <a href="index.html#why-us">Why Choose Us</a>
+        </div>
+      </nav>
+
+      <h1>Review your order request</h1>
+      <p>Confirm your cart, review cabinet details, and submit your customer information for final review.</p>
+    </div>
+  </header>
+
+  <main class="checkout-wrap">
+    <div class="shell">
+      <a class="back-link" href="index.html">← Back to cabinet builder</a>
+
+      <div class="checkout-grid">
+        <section class="card">
+          <div class="card-header">
+            <h2>Order Summary</h2>
+            <p>Your configured cabinets and current estimated total.</p>
+          </div>
+          <div class="card-body">
+            <div id="summaryItems"></div>
+
+            <div class="summary-total">
+              <span>Estimated Total</span>
+              <span id="summaryTotal">$0</span>
+            </div>
+
+            <div class="cart-actions">
+              <a class="btn btn-secondary" href="index.html">Add More Cabinets</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>Customer Details</h2>
+            <p>Submit your request and we’ll review the order before production.</p>
+          </div>
+          <div class="card-body">
+            <form id="orderForm">
+              <div class="form-grid">
+                <div>
+                  <label class="field-label" for="fullName">Full Name</label>
+                  <input id="fullName" name="fullName" placeholder="Full Name" required />
+                </div>
+
+                <div>
+                  <label class="field-label" for="email">Email Address</label>
+                  <input id="email" name="email" type="email" placeholder="Email Address" required />
+                </div>
+
+                <div>
+                  <label class="field-label" for="phone">Phone Number</label>
+                  <input id="phone" name="phone" placeholder="Phone Number" required />
+                </div>
+
+                <div>
+                  <label class="field-label" for="city">City / Job Location</label>
+                  <input id="city" name="city" placeholder="City / Job Location" />
+                </div>
+
+                <div class="full">
+                  <label class="field-label" for="notes">Project Notes</label>
+                  <textarea id="notes" name="notes" placeholder="Project notes, measurements, timeline, or special requests"></textarea>
+                </div>
+              </div>
+
+              <button type="submit" id="submitBtn">Submit Order Request</button>
+              <p class="fine-print">This submission is an order request only. Final pricing, lead time, and project details will be confirmed before production.</p>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
 
   <script>
     const EMAILJS_PUBLIC_KEY = 'zh8Yg87P1oNzc6jE8';
@@ -299,12 +487,19 @@
       return material === 'maple' ? 'Maple' : 'Stain grade / non-maple';
     }
 
+    function prettyValue(value) {
+      if (!value) return '';
+      return String(value)
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, s => s.toUpperCase());
+    }
+
     function formatUpgrades(upgrades) {
       if (!upgrades) return 'No upgrades selected';
 
       const items = [];
-      if (upgrades.doorStyle) items.push(`Door Style: ${upgrades.doorStyle}`);
-      if (upgrades.finish) items.push(`Finish: ${upgrades.finish}`);
+      if (upgrades.doorStyle) items.push(`Door Style: ${prettyValue(upgrades.doorStyle)}`);
+      if (upgrades.finish) items.push(`Finish: ${prettyValue(upgrades.finish)}`);
       if (Number(upgrades.drawerCount || 0) > 0) items.push(`Drawers: ${upgrades.drawerCount}`);
       if (upgrades.softClose) items.push('Soft-close');
       if (upgrades.finishedEnds) items.push('Finished ends');
@@ -321,7 +516,7 @@
       const submitBtn = document.getElementById('submitBtn');
 
       if (!cart.length) {
-        summaryItems.innerHTML = '<p class="empty-cart">Your cart is currently empty.</p>';
+        summaryItems.innerHTML = '<p class="empty-state">Your cart is currently empty. Go back to the builder and add at least one cabinet before submitting an order request.</p>';
         summaryTotal.textContent = '$0';
         submitBtn.disabled = true;
         return 0;
@@ -329,27 +524,18 @@
 
       let total = 0;
 
-      summaryItems.innerHTML = cart.map((item) => {
+      summaryItems.innerHTML = cart.map((item, index) => {
         total += Number(item.price || 0);
 
         return `
           <div class="summary-item">
-            <div class="summary-item-top">
-              <div class="summary-item-title">${formatType(item.type)}</div>
+            <div class="summary-top">
+              <div class="summary-title">${index + 1}. ${formatType(item.type)}</div>
               <div class="summary-price">$${item.price}</div>
             </div>
-            <div class="summary-meta">
-              <span class="summary-label">Size:</span>
-              ${item.width}W × ${item.height}H × ${item.depth}D
-            </div>
-            <div class="summary-meta">
-              <span class="summary-label">Material:</span>
-              ${formatMaterial(item.material)}
-            </div>
-            <div class="summary-upgrades">
-              <span class="summary-label">Upgrades:</span>
-              ${formatUpgrades(item.upgrades)}
-            </div>
+            <div class="summary-line"><span class="label">Size:</span> ${item.width}W × ${item.height}H × ${item.depth}D</div>
+            <div class="summary-line"><span class="label">Material:</span> ${formatMaterial(item.material)}</div>
+            <div class="summary-line"><span class="label">Upgrades:</span> ${formatUpgrades(item.upgrades)}</div>
           </div>
         `;
       }).join('');
@@ -359,7 +545,7 @@
       return total;
     }
 
-    const total = renderSummary();
+    let total = renderSummary();
 
     document.getElementById('orderForm').addEventListener('submit', async (e) => {
       e.preventDefault();
