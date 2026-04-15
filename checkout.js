@@ -1,13 +1,19 @@
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-// Update cart count
+const BUSINESS_EMAIL = "lancemoon187@gmail.com";
+
+// =======================
+// UPDATE CART COUNT
+// =======================
 function updateCartCount() {
   const el = document.getElementById("cart-count");
   if (el) el.innerText = cart.length;
 }
 updateCartCount();
 
-// Helpers
+// =======================
+// FORMAT HELPERS
+// =======================
 function formatType(type) {
   if (type === "base") return "Base Cabinet";
   if (type === "wall") return "Wall Cabinet";
@@ -16,21 +22,18 @@ function formatType(type) {
 }
 
 function formatMaterial(material) {
-  return material === "maple"
-    ? "Maple"
-    : "Stain grade / non-maple";
+  return material === "maple" ? "Maple" : "Stain grade / non-maple";
 }
 
 function pretty(val) {
   if (!val) return "";
-  return val.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+  return String(val).replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
 }
 
 function formatUpgrades(u) {
   if (!u) return "None";
 
   const list = [];
-
   if (u.doorStyle) list.push(`Door: ${pretty(u.doorStyle)}`);
   if (u.finish) list.push(`Finish: ${pretty(u.finish)}`);
   if (u.drawerCount > 0) list.push(`Drawers: ${u.drawerCount}`);
@@ -47,14 +50,25 @@ function getCartTotal() {
   return cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
 }
 
-// Render cart
+function generateInvoiceNumber() {
+  const now = new Date();
+  return `CCC-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+}
+
+// =======================
+// RENDER CART
+// =======================
 function renderCart() {
   const container = document.getElementById("cart-items");
   const totalEl = document.getElementById("cart-total");
   const submitBtn = document.getElementById("submit-order");
 
   if (!cart.length) {
-    container.innerHTML = `<div class="empty-cart">Your cart is empty.</div>`;
+    container.innerHTML = `
+      <div class="empty-cart">
+        Your cart is empty. Go back and add cabinets before checking out.
+      </div>
+    `;
     totalEl.innerText = "$0";
     submitBtn.disabled = true;
     return;
@@ -68,9 +82,7 @@ function renderCart() {
     return `
       <div class="cart-item">
         <div class="cart-item-top">
-          <div class="cart-item-title">
-            ${index + 1}. ${formatType(item.type)}
-          </div>
+          <div class="cart-item-title">${index + 1}. ${formatType(item.type)}</div>
           <div class="cart-item-price">$${item.price}</div>
         </div>
 
@@ -89,9 +101,7 @@ function renderCart() {
           ${formatUpgrades(item.upgrades)}
         </div>
 
-        <button class="remove-item-btn" onclick="removeItem(${index})">
-          Remove
-        </button>
+        <button class="remove-item-btn" onclick="removeItem(${index})">Remove</button>
       </div>
     `;
   }).join("");
@@ -100,7 +110,9 @@ function renderCart() {
   submitBtn.disabled = false;
 }
 
-// Remove item
+// =======================
+// REMOVE ITEM
+// =======================
 function removeItem(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -108,7 +120,9 @@ function removeItem(index) {
   updateCartCount();
 }
 
-// Clear cart
+// =======================
+// CLEAR CART
+// =======================
 document.getElementById("clear-cart").addEventListener("click", () => {
   cart = [];
   localStorage.removeItem("cart");
@@ -117,7 +131,95 @@ document.getElementById("clear-cart").addEventListener("click", () => {
 });
 
 // =======================
-// SUBMIT ORDER (MAILTO)
+// PDF INVOICE
+// =======================
+function buildInvoicePdf(customer, invoiceNumber) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const total = getCartTotal();
+  const today = new Date().toLocaleDateString();
+
+  let y = 20;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Container Custom Cabinets", 14, y);
+
+  y += 8;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+  doc.text("Cabinet Order Invoice / Request", 14, y);
+
+  y += 10;
+  doc.text(`Invoice #: ${invoiceNumber}`, 14, y);
+  y += 6;
+  doc.text(`Date: ${today}`, 14, y);
+
+  y += 10;
+  doc.setFont("helvetica", "bold");
+  doc.text("Customer Information", 14, y);
+
+  y += 7;
+  doc.setFont("helvetica", "normal");
+  doc.text(`Name: ${customer.fullName}`, 14, y);
+  y += 6;
+  doc.text(`Email: ${customer.email}`, 14, y);
+  y += 6;
+  doc.text(`Phone: ${customer.phone}`, 14, y);
+  y += 6;
+  doc.text(`City / Job Location: ${customer.city || "-"}`, 14, y);
+
+  y += 10;
+  doc.setFont("helvetica", "bold");
+  doc.text("Order Items", 14, y);
+
+  y += 8;
+  doc.setFont("helvetica", "normal");
+
+  cart.forEach((item, index) => {
+    const lines = [
+      `${index + 1}. ${formatType(item.type)} - $${item.price}`,
+      `   Size: ${item.width}W x ${item.height}H x ${item.depth}D`,
+      `   Material: ${formatMaterial(item.material)}`,
+      `   Upgrades: ${formatUpgrades(item.upgrades)}`
+    ];
+
+    lines.forEach((line) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(line, 14, y);
+      y += 6;
+    });
+
+    y += 2;
+  });
+
+  if (y > 260) {
+    doc.addPage();
+    y = 20;
+  }
+
+  y += 4;
+  doc.setFont("helvetica", "bold");
+  doc.text(`Estimated Total: $${total}`, 14, y);
+
+  y += 10;
+  doc.text("Project Notes", 14, y);
+
+  y += 7;
+  doc.setFont("helvetica", "normal");
+  const notes = customer.notes || "-";
+  const wrappedNotes = doc.splitTextToSize(notes, 180);
+  doc.text(wrappedNotes, 14, y);
+
+  return doc;
+}
+
+// =======================
+// SUBMIT ORDER (PDF + MAILTO)
 // =======================
 document.getElementById("order-form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -125,7 +227,22 @@ document.getElementById("order-form").addEventListener("submit", (e) => {
   if (!cart.length) return;
 
   const formData = new FormData(e.target);
+
+  const customer = {
+    fullName: formData.get("fullName") || "",
+    email: formData.get("email") || "",
+    phone: formData.get("phone") || "",
+    city: formData.get("city") || "",
+    notes: formData.get("notes") || ""
+  };
+
   const total = getCartTotal();
+  const invoiceNumber = generateInvoiceNumber();
+
+  // Generate and download PDF
+  const doc = buildInvoicePdf(customer, invoiceNumber);
+  const pdfFileName = `${invoiceNumber}.pdf`;
+  doc.save(pdfFileName);
 
   const orderItems = cart.map((item, index) => {
     return `${index + 1}. ${formatType(item.type)}
@@ -136,35 +253,47 @@ Price: $${item.price}
 `;
   }).join("\n");
 
-  const subject = "New Cabinet Order Request";
+  const subject = `Cabinet Order Request - ${invoiceNumber}`;
 
   const body = `
+A new cabinet order request has been prepared.
+
+Invoice Number: ${invoiceNumber}
+Estimated Total: $${total}
+
 Customer Information
 ---------------------
-Name: ${formData.get("fullName")}
-Email: ${formData.get("email")}
-Phone: ${formData.get("phone")}
-City: ${formData.get("city")}
+Name: ${customer.fullName}
+Email: ${customer.email}
+Phone: ${customer.phone}
+City / Job Location: ${customer.city}
 
-Project Notes:
-${formData.get("notes")}
+Project Notes
+---------------------
+${customer.notes}
 
 Order Details
 ---------------------
 ${orderItems}
 
-TOTAL: $${total}
+IMPORTANT:
+The invoice PDF was downloaded on the customer's device.
+Please attach the downloaded PDF (${pdfFileName}) before sending this email.
 `;
 
-  const mailtoLink = `mailto:lancemoon187@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoLink =
+    `mailto:${BUSINESS_EMAIL}` +
+    `?cc=${encodeURIComponent(customer.email)}` +
+    `&subject=${encodeURIComponent(subject)}` +
+    `&body=${encodeURIComponent(body)}`;
 
   window.location.href = mailtoLink;
-setTimeout(() => {
-  window.location.href = "thankyou.html";
-}, 500);
-  // optional: clear cart after opening email
-  localStorage.removeItem("cart");
+
+  setTimeout(() => {
+    localStorage.removeItem("cart");
+    window.location.href = "thankyou.html";
+  }, 1200);
 });
 
-// init
+// =======================
 renderCart();
