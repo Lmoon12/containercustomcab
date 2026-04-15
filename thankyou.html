@@ -2,64 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Order Confirmation | Container Custom Cabinets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You | Container Custom Cabinets</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
- <header class="site-header">
-  <div class="container nav">
-    <div class="brand">
-      <div class="logo"></div>
-      <div class="brand-title">
-        <strong>Container Custom Cabinets</strong>
-        <span>Custom cabinetry - simulated checkout</span>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div>Custom cabinetry built to order for kitchens, bathrooms, and storage spaces.</div>
+      <div class="topbar-right">
+        <span>Live pricing</span>
+        <span>•</span>
+        <span>Order requests reviewed before production</span>
       </div>
     </div>
-
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="product.html">Product</a>
-      <a href="cart.html">Cart</a>
-      <a href="checkout.html">Checkout</a>
-    </div>
   </div>
-</header>
 
+  <header class="hero">
+    <div class="container">
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-mark">CC</div>
+          <div>
+            <div class="brand-name">Container Custom Cabinets</div>
+            <div class="brand-sub">Built-to-order cabinetry</div>
+          </div>
+        </div>
 
-  <main class="container section">
-    <h2>Thank You</h2>
-    <p>Your order has been placed (simulated).</p>
+        <div class="nav-links">
+          <a href="index.html">Back to Shop</a>
+        </div>
+      </nav>
 
-    <p><strong>Order Number:</strong> <span id="orderId"></span></p>
-    <p><strong>Fulfillment:</strong> <span id="fulfillment"></span></p>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Order Submitted</p>
+          <h1>Thank you for your request.</h1>
+          <p class="hero-text">
+            Your cabinet order request has been sent. We’ll review the details and follow up with pricing confirmation, timing, and any next steps.
+          </p>
+          <div class="hero-actions">
+            <a href="index.html" class="btn btn-primary">Return to Home</a>
+          </div>
+        </div>
 
-    <h3>Order Summary</h3>
-    <div id="summary"></div>
-
-    <p style="margin-top:12px;">
-      <strong>Note:</strong> This website uses a simulated checkout for the class project. A real payment gateway can be integrated later.
-    </p>
-  </main>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const orderId = params.get("id");
-    document.getElementById("orderId").textContent = orderId || "N/A";
-
-    const orders = JSON.parse(localStorage.getItem("ccc_orders_v1") || "[]");
-    const order = orders.find(o => o.id === orderId);
-
-    if (order) {
-      document.getElementById("fulfillment").textContent = order.fulfillment;
-      const summaryDiv = document.getElementById("summary");
-      summaryDiv.innerHTML = order.items.map(item =>
-        `<p>${item.qty}x ${item.name} - ${item.size.w}"W x ${item.size.h}"H x ${item.size.d}"D - ${item.finish} - $${item.unitPrice.toFixed(2)}</p>`
-      ).join("") + `<p><strong>Total:</strong> $${order.total.toFixed(2)}</p>`;
-    } else {
-      document.getElementById("fulfillment").textContent = "N/A";
-      document.getElementById("summary").textContent = "Order details not found.";
-    }
-  </script>
+        <div class="hero-card">
+          <div class="hero-card-image"></div>
+          <h3>Request received</h3>
+          <p>
+            Keep an eye on your email for a response regarding your order details and confirmation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
 </body>
 </html>
