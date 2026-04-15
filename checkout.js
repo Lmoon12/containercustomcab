@@ -1,15 +1,4 @@
-const EMAILJS_PUBLIC_KEY = 'zh8Yg87P1oNzc6jE8';
-const EMAILJS_SERVICE_ID = 'service_fqhcube';
-const EMAILJS_TEMPLATE_ID = 'template_51jo6pa';
-
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-// EmailJS init
-if (window.emailjs) {
-  emailjs.init({
-    publicKey: EMAILJS_PUBLIC_KEY
-  });
-}
 
 // Update cart count
 function updateCartCount() {
@@ -167,10 +156,12 @@ ${orderItems}
 TOTAL: $${total}
 `;
 
-  const mailtoLink = `mailto:your@email.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoLink = `mailto:lancemoon187@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   window.location.href = mailtoLink;
-
+setTimeout(() => {
+  window.location.href = "thankyou.html";
+}, 500);
   // optional: clear cart after opening email
   localStorage.removeItem("cart");
 });
