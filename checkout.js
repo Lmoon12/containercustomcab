@@ -2,32 +2,23 @@ const EMAILJS_PUBLIC_KEY = 'zh8Yg87P1oNzc6jE8';
 const EMAILJS_SERVICE_ID = 'service_fqhcube';
 const EMAILJS_TEMPLATE_ID = 'template_51jo6pa';
 
-// =======================
-// LOAD CART
-// =======================
 let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-// =======================
-// EMAILJS INIT
-// =======================
+// EmailJS init
 if (window.emailjs) {
   emailjs.init({
     publicKey: EMAILJS_PUBLIC_KEY
   });
 }
 
-// =======================
-// UPDATE CART COUNT
-// =======================
+// Update cart count
 function updateCartCount() {
   const el = document.getElementById("cart-count");
   if (el) el.innerText = cart.length;
 }
 updateCartCount();
 
-// =======================
-// FORMAT HELPERS
-// =======================
+// Helpers
 function formatType(type) {
   if (type === "base") return "Base Cabinet";
   if (type === "wall") return "Wall Cabinet";
@@ -67,20 +58,14 @@ function getCartTotal() {
   return cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
 }
 
-// =======================
-// RENDER CART
-// =======================
+// Render cart
 function renderCart() {
   const container = document.getElementById("cart-items");
   const totalEl = document.getElementById("cart-total");
   const submitBtn = document.getElementById("submit-order");
 
   if (!cart.length) {
-    container.innerHTML = `
-      <div class="empty-cart">
-        Your cart is empty. Go back and add cabinets before checking out.
-      </div>
-    `;
+    container.innerHTML = `<div class="empty-cart">Your cart is empty.</div>`;
     totalEl.innerText = "$0";
     submitBtn.disabled = true;
     return;
@@ -126,9 +111,7 @@ function renderCart() {
   submitBtn.disabled = false;
 }
 
-// =======================
-// REMOVE ITEM
-// =======================
+// Remove item
 function removeItem(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -136,9 +119,7 @@ function removeItem(index) {
   updateCartCount();
 }
 
-// =======================
-// CLEAR CART
-// =======================
+// Clear cart
 document.getElementById("clear-cart").addEventListener("click", () => {
   cart = [];
   localStorage.removeItem("cart");
@@ -146,9 +127,7 @@ document.getElementById("clear-cart").addEventListener("click", () => {
   updateCartCount();
 });
 
-// =======================
-// SUBMIT ORDER
-// =======================
+// Submit order (EMAILJS)
 document.getElementById("order-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -166,14 +145,13 @@ document.getElementById("order-form").addEventListener("submit", async (e) => {
   }).join("\n");
 
   const templateParams = {
-    customer_name: formData.get("fullName") || "",
-    customer_email: formData.get("email") || "",
-    customer_phone: formData.get("phone") || "",
-    customer_city: formData.get("city") || "",
-    customer_notes: formData.get("notes") || "",
+    customer_name: formData.get("fullName"),
+    customer_email: formData.get("email"),
+    customer_phone: formData.get("phone"),
+    customer_city: formData.get("city"),
+    customer_notes: formData.get("notes"),
     order_items: orderItems,
-    order_total: total,
-    business_name: "Container Custom Cabinets"
+    order_total: total
   };
 
   try {
@@ -186,157 +164,12 @@ document.getElementById("order-form").addEventListener("submit", async (e) => {
     localStorage.removeItem("cart");
     window.location.href = "thankyou.html";
   } catch (error) {
-    console.error("EmailJS send failed:", error);
-    alert("The order request could not be sent. Please try again.");
+    console.error(error);
+    alert("Email failed to send.");
     submitBtn.disabled = false;
     submitBtn.innerText = "Submit Order Request";
   }
 });
 
-// =======================
-renderCart();
-// =======================
-// LOAD CART
-// =======================
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-// =======================
-// UPDATE CART COUNT (header)
-// =======================
-function updateCartCount() {
-  const el = document.getElementById("cart-count");
-  if (el) el.innerText = cart.length;
-}
-updateCartCount();
-
-// =======================
-// FORMAT HELPERS
-// =======================
-function formatType(type) {
-  if (type === "base") return "Base Cabinet";
-  if (type === "wall") return "Wall Cabinet";
-  if (type === "vanity") return "Vanity";
-  return type;
-}
-
-function formatMaterial(material) {
-  return material === "maple"
-    ? "Maple"
-    : "Stain grade / non-maple";
-}
-
-function pretty(val) {
-  if (!val) return "";
-  return val.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
-}
-
-function formatUpgrades(u) {
-  if (!u) return "None";
-
-  const list = [];
-
-  if (u.doorStyle) list.push(`Door: ${pretty(u.doorStyle)}`);
-  if (u.finish) list.push(`Finish: ${pretty(u.finish)}`);
-  if (u.drawerCount > 0) list.push(`Drawers: ${u.drawerCount}`);
-  if (u.softClose) list.push("Soft-close");
-  if (u.finishedEnds) list.push("Finished ends");
-  if (u.plywoodBox) list.push("Plywood box");
-  if (u.pulloutShelf) list.push("Pull-out shelf");
-  if (u.sinkBase) list.push("Sink base");
-
-  return list.length ? list.join(" • ") : "None";
-}
-
-// =======================
-// RENDER CART
-// =======================
-function renderCart() {
-  const container = document.getElementById("cart-items");
-  const totalEl = document.getElementById("cart-total");
-
-  if (!cart.length) {
-    container.innerHTML = `
-      <div class="empty-cart">
-        Your cart is empty. Go back and add cabinets before checking out.
-      </div>
-    `;
-    totalEl.innerText = "$0";
-    document.getElementById("submit-order").disabled = true;
-    return;
-  }
-
-  let total = 0;
-
-  container.innerHTML = cart.map((item, index) => {
-    total += Number(item.price || 0);
-
-    return `
-      <div class="cart-item">
-        <div class="cart-item-top">
-          <div class="cart-item-title">
-            ${index + 1}. ${formatType(item.type)}
-          </div>
-          <div class="cart-item-price">$${item.price}</div>
-        </div>
-
-        <div class="cart-item-line">
-          <strong>Size:</strong>
-          ${item.width}W × ${item.height}H × ${item.depth}D
-        </div>
-
-        <div class="cart-item-line">
-          <strong>Material:</strong>
-          ${formatMaterial(item.material)}
-        </div>
-
-        <div class="cart-item-line">
-          <strong>Upgrades:</strong>
-          ${formatUpgrades(item.upgrades)}
-        </div>
-
-        <button class="remove-item-btn" onclick="removeItem(${index})">
-          Remove
-        </button>
-      </div>
-    `;
-  }).join("");
-
-  totalEl.innerText = `$${total}`;
-}
-
-// =======================
-// REMOVE ITEM
-// =======================
-function removeItem(index) {
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-  updateCartCount();
-}
-
-// =======================
-// CLEAR CART
-// =======================
-document.getElementById("clear-cart").addEventListener("click", () => {
-  cart = [];
-  localStorage.removeItem("cart");
-  renderCart();
-  updateCartCount();
-});
-
-// =======================
-// FORM SUBMIT (TEMP)
-// =======================
-document.getElementById("order-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  if (!cart.length) return;
-
-  alert("Order submitted (next step: email integration)");
-
-  localStorage.removeItem("cart");
-  window.location.href = "thankyou.html";
-});
-
-// =======================
+// init
 renderCart();
