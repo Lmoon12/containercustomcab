@@ -127,48 +127,52 @@ document.getElementById("clear-cart").addEventListener("click", () => {
   updateCartCount();
 });
 
-// Submit order (EMAILJS)
-document.getElementById("order-form").addEventListener("submit", async (e) => {
+// =======================
+// SUBMIT ORDER (MAILTO)
+// =======================
+document.getElementById("order-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (!cart.length) return;
-
-  const submitBtn = document.getElementById("submit-order");
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Submitting...";
 
   const formData = new FormData(e.target);
   const total = getCartTotal();
 
   const orderItems = cart.map((item, index) => {
-    return `${index + 1}. ${formatType(item.type)} | ${item.width}W x ${item.height}H x ${item.depth}D | Material: ${formatMaterial(item.material)} | Upgrades: ${formatUpgrades(item.upgrades)} | Price: $${item.price}`;
+    return `${index + 1}. ${formatType(item.type)}
+Size: ${item.width}W x ${item.height}H x ${item.depth}D
+Material: ${formatMaterial(item.material)}
+Upgrades: ${formatUpgrades(item.upgrades)}
+Price: $${item.price}
+`;
   }).join("\n");
 
-  const templateParams = {
-    customer_name: formData.get("fullName"),
-    customer_email: formData.get("email"),
-    customer_phone: formData.get("phone"),
-    customer_city: formData.get("city"),
-    customer_notes: formData.get("notes"),
-    order_items: orderItems,
-    order_total: total
-  };
+  const subject = "New Cabinet Order Request";
 
-  try {
-    await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_TEMPLATE_ID,
-      templateParams
-    );
+  const body = `
+Customer Information
+---------------------
+Name: ${formData.get("fullName")}
+Email: ${formData.get("email")}
+Phone: ${formData.get("phone")}
+City: ${formData.get("city")}
 
-    localStorage.removeItem("cart");
-    window.location.href = "thankyou.html";
-  } catch (error) {
-    console.error(error);
-    alert("Email failed to send.");
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Submit Order Request";
-  }
+Project Notes:
+${formData.get("notes")}
+
+Order Details
+---------------------
+${orderItems}
+
+TOTAL: $${total}
+`;
+
+  const mailtoLink = `mailto:your@email.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  window.location.href = mailtoLink;
+
+  // optional: clear cart after opening email
+  localStorage.removeItem("cart");
 });
 
 // init
