@@ -525,4 +525,163 @@ textarea {
   .steps {
     padding: 18px;
   }
+/* =========================
+   CHECKOUT PAGE
+========================= */
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.checkout-summary,
+.checkout-form-card {
+  background: linear-gradient(180deg, #ffffff 0%, var(--surface-soft) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.summary-header {
+  margin-bottom: 18px;
+}
+
+.summary-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+}
+
+.summary-header p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cart-item {
+  border: 1px solid #eadfce;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.cart-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cart-item-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--brand-dark);
+}
+
+.cart-item-price {
+  font-weight: 800;
+  color: var(--brand-dark);
+  white-space: nowrap;
+}
+
+.cart-item-line {
+  color: var(--muted);
+  font-size: 0.94rem;
+  margin-top: 4px;
+}
+
+.cart-item-line strong {
+  color: #43382f;
+}
+
+.summary-total-box {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #eadfce;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+}
+
+.summary-total-box strong {
+  font-size: 1.5rem;
+  color: var(--brand-dark);
+}
+
+.checkout-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkout-note {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #f7f1e9;
+  border: 1px solid #eadfce;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.empty-cart {
+  border: 1px dashed #d7caba;
+  border-radius: 16px;
+  padding: 18px;
+  background: #fff;
+  color: var(--muted);
+}
+
+.remove-item-btn {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e4d7c9;
+  background: #f3ebe1;
+  color: #4f3623;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.remove-item-btn:hover {
+  background: #eadfce;
+}
+
+@media (max-width: 1100px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .cart-item-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkout-actions {
+    flex-direction: column;
+  }
+
+  .checkout-actions .btn,
+  .checkout-actions button {
+    width: 100%;
+  }
 }
